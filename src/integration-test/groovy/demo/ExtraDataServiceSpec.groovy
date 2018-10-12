@@ -1,16 +1,27 @@
 package demo
 
+import grails.gorm.multitenancy.CurrentTenant
+import grails.gorm.multitenancy.Tenants
 import grails.testing.mixin.integration.Integration
 import grails.gorm.transactions.Rollback
+import org.grails.datastore.mapping.multitenancy.resolvers.SystemPropertyTenantResolver
+import org.grails.orm.hibernate.HibernateDatastore
 import spock.lang.Specification
 import org.hibernate.SessionFactory
 
+@CurrentTenant
 @Integration
 @Rollback
 class ExtraDataServiceSpec extends Specification {
 
     ExtraDataService extraDataService
-    SessionFactory sessionFactory
+
+    HibernateDatastore hibernateDatastore
+
+    def setupSpec() {
+        System.setProperty(SystemPropertyTenantResolver.PROPERTY_NAME, 'blue')
+    }
+
 
     void "test get"() {
         when:
@@ -59,6 +70,9 @@ class ExtraDataServiceSpec extends Specification {
 
         when:
         extraDataService.delete(extra.id)
+        Serializable tenantId = Tenants.currentId(HibernateDatastore)
+        SessionFactory sessionFactory = hibernateDatastore.getDatastoreForConnection(tenantId.toString())
+                .getSessionFactory()
         sessionFactory.currentSession.flush()
 
         then:

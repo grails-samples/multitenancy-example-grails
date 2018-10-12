@@ -1,10 +1,12 @@
 package demo
 
+import grails.gorm.multitenancy.CurrentTenant
 import grails.gorm.services.Service
 import grails.gorm.services.Where
 import groovy.transform.CompileStatic
 
 @CompileStatic
+@CurrentTenant
 @Service(Extra)
 interface ExtraDataService {
 

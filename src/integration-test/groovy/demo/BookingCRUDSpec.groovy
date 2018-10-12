@@ -5,8 +5,10 @@ import demo.pages.booking.BookingEditPage
 import demo.pages.booking.BookingListPage
 import demo.pages.booking.BookingShowPage
 import geb.spock.GebReportingSpec
+import grails.gorm.multitenancy.Tenants
 import grails.testing.mixin.integration.Integration
 import grails.testing.spock.OnceBefore
+import org.grails.datastore.mapping.multitenancy.resolvers.SystemPropertyTenantResolver
 import spock.lang.IgnoreIf
 import spock.lang.Shared
 import spock.lang.Stepwise
@@ -30,14 +32,21 @@ class BookingCRUDSpec extends GebReportingSpec {
 	@Shared
 	List<Extra> extras = []
 
+	def setupSpec() {
+		System.setProperty(SystemPropertyTenantResolver.PROPERTY_NAME, 'blue')
+	}
+
 	@OnceBefore
 	def populateSampleData() {
-		rooms << roomDataService.save('Room 101')
-		rooms << roomDataService.save('Room 102')
-		rooms << roomDataService.save('Room 103')
-		extras << extraDataService.save('Breakfast')
-		extras << extraDataService.save('Crib')
-		extras << extraDataService.save('Champagne')
+		Tenants.withCurrent {
+			rooms << roomDataService.save('Room 101')
+			rooms << roomDataService.save('Room 102')
+			rooms << roomDataService.save('Room 103')
+			extras << extraDataService.save('Breakfast')
+			extras << extraDataService.save('Crib')
+			extras << extraDataService.save('Champagne')
+		}
+
 	}
 
 	def cleanupSpec() {

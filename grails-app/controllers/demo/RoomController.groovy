@@ -1,5 +1,6 @@
 package demo
 
+import grails.gorm.multitenancy.CurrentTenant
 import grails.validation.ValidationException
 import groovy.transform.CompileStatic
 import org.springframework.context.MessageSource
@@ -34,6 +35,7 @@ class RoomController implements BeanMessage {
         respond new Room(params)
     }
 
+    @CurrentTenant
     def save(Room room) {
         if (room == null) {
             notFound()
@@ -56,6 +58,7 @@ class RoomController implements BeanMessage {
         respond roomDataService.get(id)
     }
 
+    @CurrentTenant
     def update(Room room) {
         if (room == null) {
             notFound()

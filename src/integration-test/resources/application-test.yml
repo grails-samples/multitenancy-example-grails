@@ -1,0 +1,4 @@
+grails:
+  gorm:
+    multiTenancy:
+      tenantResolverClass: org.grails.datastore.mapping.multitenancy.resolvers.SystemPropertyTenantResolver

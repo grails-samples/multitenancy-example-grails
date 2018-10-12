@@ -1,8 +1,10 @@
 package demo
 
+import grails.gorm.multitenancy.CurrentTenant
 import grails.gorm.services.Service
 import groovy.transform.CompileStatic
 
+@CurrentTenant
 @CompileStatic
 @Service(Booking)
 interface BookingDataService {

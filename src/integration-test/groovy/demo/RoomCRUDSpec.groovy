@@ -6,6 +6,7 @@ import demo.pages.room.RoomListPage
 import demo.pages.room.ShowRoomPage
 import geb.spock.GebReportingSpec
 import grails.testing.mixin.integration.Integration
+import org.grails.datastore.mapping.multitenancy.resolvers.SystemPropertyTenantResolver
 import spock.lang.IgnoreIf
 import spock.lang.Stepwise
 
@@ -13,6 +14,10 @@ import spock.lang.Stepwise
 @Stepwise
 @IgnoreIf({ !System.getProperty('geb.env') })
 class RoomCRUDSpec extends GebReportingSpec {
+
+	def setupSpec() {
+		System.setProperty(SystemPropertyTenantResolver.PROPERTY_NAME, 'blue')
+	}
 
 	def 'there are no rooms'() {
 		when:

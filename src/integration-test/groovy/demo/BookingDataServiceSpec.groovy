@@ -1,18 +1,24 @@
 package demo
 
+import grails.gorm.multitenancy.CurrentTenant
+import grails.gorm.multitenancy.Tenants
 import grails.testing.mixin.integration.Integration
 import grails.gorm.transactions.Rollback
 import groovy.time.TimeCategory
+import org.grails.datastore.mapping.multitenancy.resolvers.SystemPropertyTenantResolver
+import org.grails.orm.hibernate.HibernateDatastore
 import spock.lang.Shared
 import spock.lang.Specification
 import org.hibernate.SessionFactory
 
+@CurrentTenant
 @Integration
 @Rollback
 class BookingDataServiceSpec extends Specification {
 
     BookingDataService bookingDataService
-    SessionFactory sessionFactory
+
+    HibernateDatastore hibernateDatastore
 
     @Shared
     Date arrival
@@ -21,6 +27,8 @@ class BookingDataServiceSpec extends Specification {
     Date departure
 
     def setupSpec() {
+        System.setProperty(SystemPropertyTenantResolver.PROPERTY_NAME, 'blue')
+
         Date now = new Date()
         use(TimeCategory) {
             arrival = now + 1.day
@@ -93,6 +101,9 @@ class BookingDataServiceSpec extends Specification {
 
         when:
         bookingDataService.delete(booking.id)
+        Serializable tenantId = Tenants.currentId(HibernateDatastore)
+        SessionFactory sessionFactory = hibernateDatastore.getDatastoreForConnection(tenantId.toString())
+                .getSessionFactory()
         sessionFactory.currentSession.flush()
 
         then:
