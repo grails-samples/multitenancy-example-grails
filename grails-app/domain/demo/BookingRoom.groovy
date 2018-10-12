@@ -12,7 +12,7 @@ class BookingRoom implements MultiTenant<BookingRoom> {
     Booking booking
     Room room
 
-    static mapping = {
+    static constraints = {
         booking nullable: false
         room nullable: false
     }

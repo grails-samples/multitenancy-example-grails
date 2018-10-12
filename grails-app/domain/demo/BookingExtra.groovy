@@ -12,7 +12,7 @@ class BookingExtra implements MultiTenant<BookingExtra> {
     Booking booking
     Extra extra
 
-    static mapping = {
+    static constraints = {
         booking nullable: false
         extra nullable: false
     }
