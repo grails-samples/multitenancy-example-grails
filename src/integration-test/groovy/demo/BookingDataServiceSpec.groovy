@@ -18,7 +18,7 @@ class BookingDataServiceSpec extends Specification {
 
     BookingDataService bookingDataService
 
-    HibernateDatastore hibernateDatastore
+    SessionFactory sessionFactory
 
     @Shared
     Date arrival
@@ -101,9 +101,6 @@ class BookingDataServiceSpec extends Specification {
 
         when:
         bookingDataService.delete(booking.id)
-        Serializable tenantId = Tenants.currentId(HibernateDatastore)
-        SessionFactory sessionFactory = hibernateDatastore.getDatastoreForConnection(tenantId.toString())
-                .getSessionFactory()
         sessionFactory.currentSession.flush()
 
         then:

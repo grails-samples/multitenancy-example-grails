@@ -16,7 +16,7 @@ class ExtraDataServiceSpec extends Specification {
 
     ExtraDataService extraDataService
 
-    HibernateDatastore hibernateDatastore
+    SessionFactory sessionFactory
 
     def setupSpec() {
         System.setProperty(SystemPropertyTenantResolver.PROPERTY_NAME, 'blue')
@@ -70,9 +70,6 @@ class ExtraDataServiceSpec extends Specification {
 
         when:
         extraDataService.delete(extra.id)
-        Serializable tenantId = Tenants.currentId(HibernateDatastore)
-        SessionFactory sessionFactory = hibernateDatastore.getDatastoreForConnection(tenantId.toString())
-                .getSessionFactory()
         sessionFactory.currentSession.flush()
 
         then:

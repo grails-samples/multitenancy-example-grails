@@ -1,13 +1,11 @@
 package demo
 
 import grails.gorm.multitenancy.CurrentTenant
-import grails.gorm.multitenancy.Tenants
-import grails.testing.mixin.integration.Integration
 import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import org.grails.datastore.mapping.multitenancy.resolvers.SystemPropertyTenantResolver
-import org.grails.orm.hibernate.HibernateDatastore
-import spock.lang.Specification
 import org.hibernate.SessionFactory
+import spock.lang.Specification
 
 @CurrentTenant
 @Integration
@@ -16,7 +14,7 @@ class RoomDataServiceSpec extends Specification {
 
     RoomDataService roomDataService
 
-    HibernateDatastore hibernateDatastore
+    SessionFactory sessionFactory
 
     def setupSpec() {
         System.setProperty(SystemPropertyTenantResolver.PROPERTY_NAME, 'blue')
@@ -70,10 +68,6 @@ class RoomDataServiceSpec extends Specification {
 
         when:
         roomDataService.delete(room.id)
-
-        Serializable tenantId = Tenants.currentId(HibernateDatastore)
-        SessionFactory sessionFactory = hibernateDatastore.getDatastoreForConnection(tenantId.toString())
-            .getSessionFactory()
         sessionFactory.currentSession.flush()
 
         then:

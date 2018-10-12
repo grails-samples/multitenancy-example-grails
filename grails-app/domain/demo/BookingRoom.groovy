@@ -9,11 +9,15 @@ import groovy.transform.ToString
 @EqualsAndHashCode
 @GrailsCompileStatic
 class BookingRoom implements MultiTenant<BookingRoom> {
+    String hotelname
     Booking booking
     Room room
-
+    static constraints = {
+        hotelname nullable: true
+    }
     static mapping = {
         booking nullable: false
         room nullable: false
+        tenantId name: 'hotelname'
     }
 }
