@@ -27,7 +27,7 @@ where $b = $booking""")
     @Query("""
 select $extra 
 from ${BookingExtra bookingExtra}
-inner join ${Extra extra = bookingExtra.booking}  
+inner join ${Extra extra = bookingExtra.extra}  
 inner join ${Booking b = bookingExtra.booking}  
 where $b = $booking""")
     List<Extra> findExtraByBooking(Booking booking)
