@@ -15,10 +15,12 @@ class BookingExtra implements MultiTenant<BookingExtra> {
 
     static constraints = {
         hotelname nullable: true
-    }
-    static mapping = {
         booking nullable: false
         extra nullable: false
+    }
+
+    static mapping = {
         tenantId name: 'hotelname'
+
     }
 }
