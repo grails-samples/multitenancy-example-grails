@@ -1,12 +1,14 @@
 package demo
 
 import grails.gorm.multitenancy.CurrentTenant
+import grails.plugin.springsecurity.annotation.Secured
 import grails.validation.ValidationException
 import groovy.transform.CompileStatic
 import org.springframework.context.MessageSource
 
 @SuppressWarnings(['FactoryMethodName', 'ReturnNullFromCatchBlock'])
 @CompileStatic
+@Secured("isAuthenticated()")
 class RoomController implements BeanMessage {
 
     RoomDataService roomDataService

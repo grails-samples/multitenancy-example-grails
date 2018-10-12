@@ -1,5 +1,6 @@
 package demo
 
+import demo.pages.LoginPage
 import demo.pages.extra.CreateExtraPage
 import demo.pages.extra.EditExtraPage
 import demo.pages.extra.ExtraListPage
@@ -15,12 +16,11 @@ import spock.lang.Stepwise
 @IgnoreIf({ !System.getProperty('geb.env') })
 class ExtraCRUDSpec extends GebReportingSpec {
 
-	def setupSpec() {
-		System.setProperty(SystemPropertyTenantResolver.PROPERTY_NAME, 'blue')
-	}
 
 	def 'there are no extras'() {
 		when:
+		LoginPage loginPage = browser.to(LoginPage)
+		loginPage.login('sherlock', 'elementary')
 		ExtraListPage page = to ExtraListPage
 
 		then:

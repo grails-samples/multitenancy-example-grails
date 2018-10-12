@@ -1,24 +1,23 @@
 package demo
 
-import grails.gorm.multitenancy.CurrentTenant
-import grails.gorm.multitenancy.Tenants
 import grails.testing.mixin.integration.Integration
 import grails.gorm.transactions.Rollback
+import grails.testing.spock.OnceBefore
 import groovy.time.TimeCategory
 import org.grails.datastore.mapping.multitenancy.resolvers.SystemPropertyTenantResolver
-import org.grails.orm.hibernate.HibernateDatastore
 import spock.lang.Shared
 import spock.lang.Specification
 import org.hibernate.SessionFactory
 
-@CurrentTenant
 @Integration
 @Rollback
-class BookingDataServiceSpec extends Specification {
+class BookingDataServiceSpec extends Specification implements LoginAs {
 
     BookingDataService bookingDataService
 
     SessionFactory sessionFactory
+
+    UserDataService userDataService
 
     @Shared
     Date arrival
@@ -26,9 +25,12 @@ class BookingDataServiceSpec extends Specification {
     @Shared
     Date departure
 
-    def setupSpec() {
-        System.setProperty(SystemPropertyTenantResolver.PROPERTY_NAME, 'blue')
+    @OnceBefore
+    void init() {
+        loginAs('sherlock')
+    }
 
+    def setupSpec() {
         Date now = new Date()
         use(TimeCategory) {
             arrival = now + 1.day

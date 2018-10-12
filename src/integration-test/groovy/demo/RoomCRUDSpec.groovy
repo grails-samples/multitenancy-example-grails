@@ -1,5 +1,6 @@
 package demo
 
+import demo.pages.LoginPage
 import demo.pages.room.CreateRoomPage
 import demo.pages.room.EditRoomPage
 import demo.pages.room.RoomListPage
@@ -14,13 +15,10 @@ import spock.lang.Stepwise
 @Stepwise
 @IgnoreIf({ !System.getProperty('geb.env') })
 class RoomCRUDSpec extends GebReportingSpec {
-
-	def setupSpec() {
-		System.setProperty(SystemPropertyTenantResolver.PROPERTY_NAME, 'blue')
-	}
-
 	def 'there are no rooms'() {
 		when:
+		LoginPage loginPage = browser.to(LoginPage)
+		loginPage.login('sherlock', 'elementary')
 		RoomListPage page = to RoomListPage
 
 		then:

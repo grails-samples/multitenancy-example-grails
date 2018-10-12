@@ -1,14 +1,13 @@
 package demo
 
+import demo.pages.LoginPage
 import demo.pages.booking.CreateBookingPage
 import demo.pages.booking.BookingEditPage
 import demo.pages.booking.BookingListPage
 import demo.pages.booking.BookingShowPage
 import geb.spock.GebReportingSpec
-import grails.gorm.multitenancy.Tenants
 import grails.testing.mixin.integration.Integration
 import grails.testing.spock.OnceBefore
-import org.grails.datastore.mapping.multitenancy.resolvers.SystemPropertyTenantResolver
 import spock.lang.IgnoreIf
 import spock.lang.Shared
 import spock.lang.Stepwise
@@ -18,7 +17,7 @@ import java.time.LocalDate
 @Integration
 @Stepwise
 @IgnoreIf({ !System.getProperty('geb.env') })
-class BookingCRUDSpec extends GebReportingSpec {
+class BookingCRUDSpec extends GebReportingSpec implements LoginAs {
 
 	@Shared
 	RoomDataService roomDataService
@@ -26,27 +25,23 @@ class BookingCRUDSpec extends GebReportingSpec {
 	@Shared
 	ExtraDataService extraDataService
 
+	UserDataService userDataService
+
 	@Shared
 	List<Room> rooms = []
 
 	@Shared
 	List<Extra> extras = []
 
-	def setupSpec() {
-		System.setProperty(SystemPropertyTenantResolver.PROPERTY_NAME, 'blue')
-	}
-
 	@OnceBefore
 	def populateSampleData() {
-		Tenants.withCurrent {
-			rooms << roomDataService.save('Room 101')
-			rooms << roomDataService.save('Room 102')
-			rooms << roomDataService.save('Room 103')
-			extras << extraDataService.save('Breakfast')
-			extras << extraDataService.save('Crib')
-			extras << extraDataService.save('Champagne')
-		}
-
+		loginAs('sherlock')
+		rooms << roomDataService.save('Room 101')
+		rooms << roomDataService.save('Room 102')
+		rooms << roomDataService.save('Room 103')
+		extras << extraDataService.save('Breakfast')
+		extras << extraDataService.save('Crib')
+		extras << extraDataService.save('Champagne')
 	}
 
 	def cleanupSpec() {
@@ -56,6 +51,8 @@ class BookingCRUDSpec extends GebReportingSpec {
 	
 	def 'there are no bookings'() {
 		when:
+		LoginPage loginPage = browser.to(LoginPage)
+		loginPage.login('sherlock', 'elementary')
 		BookingListPage page = to BookingListPage
 
 		then:

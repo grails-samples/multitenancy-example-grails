@@ -62,6 +62,8 @@ dependencies {
     testCompile "org.seleniumhq.selenium:selenium-remote-driver:$seleniumVersion"
     testCompile "org.seleniumhq.selenium:selenium-api:$seleniumVersion"
     testCompile "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
+
+    compile 'org.grails.plugins:spring-security-core:3.2.3'
 }
 
 webdriverBinaries {

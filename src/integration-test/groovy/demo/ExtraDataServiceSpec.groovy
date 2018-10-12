@@ -1,27 +1,26 @@
 package demo
 
-import grails.gorm.multitenancy.CurrentTenant
-import grails.gorm.multitenancy.Tenants
 import grails.testing.mixin.integration.Integration
 import grails.gorm.transactions.Rollback
+import grails.testing.spock.OnceBefore
 import org.grails.datastore.mapping.multitenancy.resolvers.SystemPropertyTenantResolver
-import org.grails.orm.hibernate.HibernateDatastore
 import spock.lang.Specification
 import org.hibernate.SessionFactory
 
-@CurrentTenant
 @Integration
 @Rollback
-class ExtraDataServiceSpec extends Specification {
+class ExtraDataServiceSpec extends Specification  implements LoginAs {
 
     ExtraDataService extraDataService
 
     SessionFactory sessionFactory
 
-    def setupSpec() {
-        System.setProperty(SystemPropertyTenantResolver.PROPERTY_NAME, 'blue')
-    }
+    UserDataService userDataService
 
+    @OnceBefore
+    void init() {
+        loginAs('sherlock')
+    }
 
     void "test get"() {
         when:

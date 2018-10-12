@@ -1,23 +1,24 @@
 package demo
 
-import grails.gorm.multitenancy.CurrentTenant
 import grails.gorm.transactions.Rollback
 import grails.testing.mixin.integration.Integration
-import org.grails.datastore.mapping.multitenancy.resolvers.SystemPropertyTenantResolver
+import grails.testing.spock.OnceBefore
 import org.hibernate.SessionFactory
 import spock.lang.Specification
 
-@CurrentTenant
 @Integration
 @Rollback
-class RoomDataServiceSpec extends Specification {
+class RoomDataServiceSpec extends Specification implements LoginAs {
 
     RoomDataService roomDataService
 
     SessionFactory sessionFactory
 
-    def setupSpec() {
-        System.setProperty(SystemPropertyTenantResolver.PROPERTY_NAME, 'blue')
+    UserDataService userDataService
+
+    @OnceBefore
+    def init() {
+        loginAs('sherlock')
     }
 
     void "test get"() {
@@ -83,4 +84,5 @@ class RoomDataServiceSpec extends Specification {
         room.id != null
         room.name == 'Room 106'
     }
+
 }

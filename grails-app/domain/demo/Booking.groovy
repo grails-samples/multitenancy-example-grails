@@ -9,7 +9,7 @@ import groovy.transform.ToString
 @EqualsAndHashCode
 @GrailsCompileStatic
 class Booking implements MultiTenant<Booking> {
-    String hotelname
+    String username
     String name
     String email
     String telephone
@@ -28,10 +28,10 @@ class Booking implements MultiTenant<Booking> {
         adults min: 1
         children min: 0
         babys min: 0
-        hotelname nullable: true
+        username nullable: true
     }
 
     static mapping = {
-        tenantId name: 'hotelname'
+        tenantId name: 'username'
     }
 }
