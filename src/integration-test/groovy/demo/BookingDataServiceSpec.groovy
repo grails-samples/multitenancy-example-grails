@@ -1,12 +1,10 @@
 package demo
 
 import grails.gorm.multitenancy.CurrentTenant
-import grails.gorm.multitenancy.Tenants
 import grails.testing.mixin.integration.Integration
 import grails.gorm.transactions.Rollback
 import groovy.time.TimeCategory
 import org.grails.datastore.mapping.multitenancy.resolvers.SystemPropertyTenantResolver
-import org.grails.orm.hibernate.HibernateDatastore
 import spock.lang.Shared
 import spock.lang.Specification
 import org.hibernate.SessionFactory
