@@ -14,10 +14,11 @@ class BookingRoom implements MultiTenant<BookingRoom> {
     Room room
     static constraints = {
         username nullable: true
-    }
-    static mapping = {
         booking nullable: false
         room nullable: false
+    }
+
+    static mapping = {
         tenantId name: 'username'
     }
 }
